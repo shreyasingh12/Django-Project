@@ -9,25 +9,38 @@ def index(request):
     #watch?v=zs2Ux1jfDD0&list=PLu0W_9lII9ah7DDtYtflgwMwpT3xmjXY9&index=6" >heyyy</a>''')
 
 
-def about(request):
-    return HttpResponse("about shreya")
+def analyze(request):
+    #Get the text
+    djtext = request.GET.get('text', 'default')
 
-def removepunc(request):
-    #get text
-    djtext=request.GET.get('text','default')
-    print(djtext)
-    #analyse the text
-    return HttpResponse("remove punc")
+    # Check checkbox values
+    removepunc = request.GET.get('removepunc', 'off')
+    fullcaps = request.GET.get('fullcaps', 'off')
+    newlineremover = request.GET.get('newlineremover', 'off')
+    extraspaceremover = request.GET.get('extraspaceremover', 'off')
 
-def capfirst(request):
-    return HttpResponse("capitalize first")
+    #Check which checkbox is on
+    if removepunc == "on":
+        punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
+        analyzed = ""
+        for char in djtext:
+            if char not in punctuations:
+                analyzed = analyzed + char
+        params = {'purpose':'Removed Punctuations', 'analyzed_text': analyzed}
+        return render(request, 'analyze.html', params)
 
-def newlineremove(request):
-    return HttpResponse("capitalize first")
+    else:
+        return HttpResponse("Error")
 
-
-def spaceremove(request):
-    return HttpResponse("space remover")
-
-def charcount(request):
-    return HttpResponse("charcount ")
+# def capfirst(request):
+#     return HttpResponse("capitalize first")
+#
+# def newlineremove(request):
+#     return HttpResponse("newline remove first")
+#
+#
+# def spaceremove(request):
+#     return HttpResponse("space remover back")
+#
+# def charcount(request):
+#     return HttpResponse("charcount ")
